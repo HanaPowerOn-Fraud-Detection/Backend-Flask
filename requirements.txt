@@ -1,0 +1,4 @@
+PyMuPDF
+os
+requests
+dotenv
