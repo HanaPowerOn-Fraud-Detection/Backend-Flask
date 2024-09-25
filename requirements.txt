@@ -1,4 +1,6 @@
-PyMuPDF
-os
+flask
+flask-cors
+openai
+python-dotenv
 requests
-dotenv
+PyMuPDF

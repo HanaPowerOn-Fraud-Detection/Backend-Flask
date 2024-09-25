@@ -10,7 +10,7 @@ import fitz  # PyMuPDF
 load_dotenv()
 
 # Clova OCR API 인증 정보 가져오기
-clova_ocr_secret = os.getenv('CLOVA_SEKRET_KEY')  # Clova OCR API 비밀키
+clova_ocr_secret = os.getenv('CLOVA_SECRET_KEY')  # Clova OCR API 비밀키
 apigw_url = os.getenv('CLOVA_OCR_URL')  # Clova OCR API URL
 # PDF 파일 경로 설정
 file_path = '/Users/juseung/Documents/Hana/result.pdf'
