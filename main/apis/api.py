@@ -7,8 +7,8 @@ api_bp = Blueprint('api_bp', __name__)
 def home():
     return 'Server is running!'
 
-# 다른 API 엔드포인트들도 여기에 추가
+# CCD
 @api_bp.route('/example', methods=['POST'])
-def example():
+def d():
     data = request.json
     return jsonify({"message": "Example response", "data": data}), 200
