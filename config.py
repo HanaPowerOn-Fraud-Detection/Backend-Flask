@@ -6,6 +6,7 @@ load_dotenv()
 
 class Config:
     # SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')  # 기본 비밀키
+    SQLALCHEMY_TRACK_MODIFICATIONS = False  # SQLAlchemy의 변경 사항 추적 비활성화
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')  # 데이터베이스 URL
 
     # API 관련 환경 변수

@@ -6,11 +6,11 @@
 from .services import gpt_service  # GPT 서비스 모듈 임포트
 from .services import clova_service  # CLova OCR 서비스 모듈 임포트
 from .apis import api_bp  # API 모듈 임포트
+from .models import db
 
 __all__ = [
     'gpt_service',  # GPT API 서비스의 공개 객체
     'clova_service',  # CLova OCR API 서비스의 공개 객체
-    'route',  # views 모듈의 경로 객체
     'api_bp',  # APIs 모듈의 API 객체
 ]
 

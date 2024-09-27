@@ -4,3 +4,5 @@ openai
 python-dotenv
 requests
 PyMuPDF
+flask-sqlalchemy
+pymysql
