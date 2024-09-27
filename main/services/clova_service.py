@@ -3,7 +3,6 @@ import requests
 from flask import current_app
 import uuid, time
 import json
-
 class ClovaService:
     def __init__(self):
         # CLova OCR API 관련 설정

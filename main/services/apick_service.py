@@ -8,7 +8,7 @@ class ApickService:
         # 두 번째 API 요청 URL (PDF 다운로드)
         self.get_pdf_url = "https://apick.app/rest/iros_download/1"
         # API 키 가져오기
-        self.api_key = current_app.config['APICK_CLIENT_API_KEY']
+        self.auth_key = current_app.config['APICK_CLIENT_API_KEY']
 
     def get_ic_id(self, unique_num):
         """
@@ -17,7 +17,7 @@ class ApickService:
         :return: IC ID
         """
         # 요청 헤더 설정
-        headers = {"CL_AUTH_KEY": self.api_key}
+        headers = {"CL_AUTH_KEY": self.auth_key}
         # 요청 데이터 설정
         data = {"unique_num": unique_num}
 
@@ -25,9 +25,9 @@ class ApickService:
         try:
             response = requests.post(self.get_icid_url, headers=headers, data=data)
             response.raise_for_status()
-            print(response.json())
-            ic_id = response.json().get('ic_id')
-            return ic_id
+            print("------ICID 요청 API Response------")
+            response_data = response.json()
+            return response_data['data'].get('ic_id')
         except requests.exceptions.RequestException as e:
             print(f"Error while fetching IC ID: {e}")
             return None
@@ -39,12 +39,13 @@ class ApickService:
         :return: PDF 파일의 바이너리 데이터
         """
         # 요청 헤더 설정
-        headers = {"CL_AUTH_KEY": self.api_key}
+        headers = {"CL_AUTH_KEY": self.auth_key}
         # 요청 데이터 설정
         data = {"ic_id": int(ic_id)}
 
         # 두 번째 API 요청 (PDF 다운로드)
         try:
+            print("------PDF 다운로드 API Request------")
             response = requests.post(self.get_pdf_url, headers=headers, data=data)
             response.raise_for_status()
             return response.content  # PDF 파일의 바이너리 데이터 반환

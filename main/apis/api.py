@@ -5,7 +5,7 @@ from main.services.clova_service import ClovaService
 from main.models.models import db, RealEstate, Report
 import fitz  # PyMuPDF
 import os
-import datetime
+from datetime import datetime
 
 # 블루프린트 정의
 api_bp = Blueprint('api_bp', __name__)
@@ -26,18 +26,20 @@ def get_registration():
         }), 404
     
     existing_record = RealEstate.query.filter_by(unique_num=unique_num).first()
+    apickService = ApickService()  # ApickService 인스턴스화
     if existing_record:
         ic_id = existing_record.ic_id
         print(f"기존 레코드 발견: ic_id={ic_id}")
     else:
         try:
-            ic_id = ApickService.get_ic_id(unique_num)
+            # ic_id = apickService.get_ic_id(unique_num)  # unique_num을 넘겨서 메소드 호출
+            print("ic_id 반환값:", ic_id)
             if not ic_id:
-                print("IC ID 없음: 외부 API 응답에서 ic_id를 찾을 수 없습니다.")
+                print("IC ID가 반환되지 않음(Apick 부동산 등기부 등본 열람 API 요청에 실패했습니다.")
                 return jsonify({
                     "status_code": 400,
                     "error": "IC ID 없음",
-                    "message": "외부 API 응답에서 ic_id를 찾을 수 없습니다."
+                    "message": "IC ID가 반환되지 않음(Apick 부동산 등기부 등본 열람 API 요청에 실패했습니다."
                 }), 400
             
             new_record = RealEstate(unique_num=unique_num, ic_id=ic_id)
@@ -52,20 +54,19 @@ def get_registration():
                 "error": "IC ID 가져오기 실패",
                 "message": str(e)
             }), 500
-        
-    print("ic_id 출력값:", ic_id)
-
-    pdf_data = ApickService.download_pdf(ic_id)
+    
+    pdf_data = apickService.download_pdf(ic_id)
     print("PDF 다운로드 시도 중...")
-
+    # existing_report = Report.query.filter_by(id = 1).first()
+    # pdf_data = existing_report.registration_pdf
     # PDF 출력 디렉토리가 존재하지 않으면 생성
     pdf_output_dir = current_app.config['PDF_OUTPUT_DIR']
     os.makedirs(pdf_output_dir, exist_ok=True)
-
     if pdf_data:
-        report_record = Report(user_id=None, registration_pdf=pdf_data)
-        db.session.add(report_record)
-        db.session.commit()
+        # real_estate = RealEstate.query.filter_by(unique_num=unique_num).first()
+        # report_record = Report(real_estate_id = real_estate.id, registration_pdf=pdf_data)
+        # db.session.add(report_record)
+        # db.session.commit()
         print("PDF 데이터베이스에 저장 완료.")
 
         # 현재 시간 정보를 YYYYMMDDttmm 형식으로 포맷

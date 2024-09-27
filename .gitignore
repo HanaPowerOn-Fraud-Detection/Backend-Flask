@@ -1,3 +1,6 @@
 .env
 result.pdf
 page_*.png
+
+output_images/*
+output_pdf/*
