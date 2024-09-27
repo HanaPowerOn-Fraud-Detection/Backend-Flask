@@ -15,3 +15,7 @@ class Config:
     CLOVA_SECRET_KEY = os.getenv('CLOVA_SECRET_KEY')
     CLOVA_OCR_URL = os.getenv('CLOVA_OCR_URL')
     GPT_SECRET_KEY = os.getenv('GPT_SECRET_KEY')
+
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Flask 애플리케이션 root 디렉토리
+    IMAGE_OUTPUT_DIR = os.path.join(BASE_DIR, 'output_images')  # Specify your output directory here
+    PDF_OUTPUT_DIR = os.path.join(BASE_DIR, 'output_pdf')

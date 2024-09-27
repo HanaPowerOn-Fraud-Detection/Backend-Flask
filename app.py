@@ -15,10 +15,11 @@ CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST"]}})
 # 설정 파일 로드
 app.config.from_object(Config)
 
+# 이미 테이블이 존재할 경우 그 테이블을 덮어쓰거나 삭제하지 않는다.
 db.init_app(app)
-
 with app.app_context():
     db.create_all()
+    print("db가 초기화 되었습니다.")
 
 # 블루프린트 등록 (API와 라우트 경로를 등록)
 app.register_blueprint(api_bp, url_prefix='/api')  # '/api' 경로에 모든 API 등록

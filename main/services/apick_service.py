@@ -25,6 +25,7 @@ class ApickService:
         try:
             response = requests.post(self.get_icid_url, headers=headers, data=data)
             response.raise_for_status()
+            print(response.json())
             ic_id = response.json().get('ic_id')
             return ic_id
         except requests.exceptions.RequestException as e:
