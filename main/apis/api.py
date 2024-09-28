@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
 from main.services.apick_service import ApickService
 from main.services.clova_service import ClovaService
+from main.services.gpt_service import GPTService
 # Now you should be able to import db and RealEstate
 from main.models.models import db, RealEstate, Report
 import fitz  # PyMuPDF
@@ -153,3 +154,58 @@ def get_registration():
             "error": "PDF 다운로드 실패",
             "message": "PDF 데이터를 다운로드하는 데 실패했습니다."
         }), 500
+    
+@api_bp.route('/registrations/report', methods=['GET'])
+def get_report():
+    # # 상대경로 기준으로 PDF 파일 경로 설정
+    # pdf_path = 'output_pdf/3137313_202409280152.pdf'
+    
+    # # ClovaService 인스턴스 생성
+    # clova_service = ClovaService()
+    
+    # # Clova OCR API를 호출하여 PDF에서 텍스트 추출
+    # print("1단계: Clova OCR API 호출 중...")
+    # ocr_result = clova_service.get_registration_text(pdf_path)
+    # print("OCR API 응답:", ocr_result)
+    
+    # # OCR API 결과 파싱
+    # print("2단계: OCR 결과 파싱 중...")
+    # extracted_text = []
+    # for image_result in ocr_result.get('images', []):
+    #     fields = sorted(image_result.get('fields', []), key=lambda x: x['boundingPoly']['vertices'][0]['y'])
+        
+    #     lines = []
+    #     current_line = []
+    #     current_line_y = fields[0]['boundingPoly']['vertices'][0]['y'] if fields else 0
+
+    #     for field in fields:
+    #         field_y = field['boundingPoly']['vertices'][0]['y']
+            
+    #         if abs(field_y - current_line_y) > 10:
+    #             current_line = sorted(current_line, key=lambda x: x['boundingPoly']['vertices'][0]['x'])
+    #             lines.append(current_line)
+    #             current_line = []
+    #             current_line_y = field_y
+            
+    #         current_line.append(field)
+
+    #     if current_line:
+    #         current_line = sorted(current_line, key=lambda x: x['boundingPoly']['vertices'][0]['x'])
+    #         lines.append(current_line)
+
+    #     for line in lines:
+    #         line_text = " ".join([word['inferText'] for word in line])
+    #         extracted_text.append(line_text)
+
+    # full_text = "\n".join(extracted_text)
+    full_text = current_app.config('FULL_TEXT')
+    print("추출된 전체 텍스트:\n", full_text)
+
+    # GPT 모델을 통해 보고서 생성
+    print("3단계: GPT 모델에 텍스트 전달 중...")
+    gpt_service = GPTService()
+    report_response = gpt_service.call_gpt(full_text)
+    print("GPT 모델 응답:", report_response)
+
+    # 보고서 결과를 JSON으로 반환
+    return jsonify({"report": report_response})
