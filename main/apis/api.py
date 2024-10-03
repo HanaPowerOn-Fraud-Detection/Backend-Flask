@@ -334,8 +334,11 @@ def get_report():
     # GPT 모델을 통해 보고서 생성
     print("3단계: GPT 모델에 텍스트 전달 중...")
     gpt_service = GPTService()
-    report_response = gpt_service.call_gpt(full_text, market_price)
+    report_response, mortgage_amounts, final_evalutaion = gpt_service.call_gpt(full_text, market_price)
+    print("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
     print("GPT 모델 응답:", report_response)
+    print("추출된 근저당설정 금액 배열:", mortgage_amounts)
+    print("최종 평가 결과", final_evalutaion )
 
     # 보고서 결과를 JSON으로 반환
     return jsonify({"report": report_response})
